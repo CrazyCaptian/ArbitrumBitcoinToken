@@ -478,7 +478,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
          }
          
         _reAdjustDifficulty();
-        GUILD.send(address(this).balance.div(1000));
+        GUILD.send(address(this).balance.div(50));
     }
 
     challengeNumber = blockhash(block.number - 1);

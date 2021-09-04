@@ -10,7 +10,7 @@
 
 //Send Arbitrum ETH directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
 
-pragma solidity ^0.7.6;
+pragma solidity ^0.8.0;
 
 contract Ownabled {
     address public owner22;
@@ -147,14 +147,10 @@ contract GasPump {
 }
 
 
-contract ArbiBTC{
-       function init(address addy, uint x) external {}
-}
-
 
 
   
-  contract ArbiBTCProofOfBurn is  ArbiBTC, GasPump, IERC20, Ownabled
+  contract ArbiBTCProofOfBurn is  GasPump, IERC20, Ownabled
 {
     using SafeMath for uint;
     // ERC-20 Parameters

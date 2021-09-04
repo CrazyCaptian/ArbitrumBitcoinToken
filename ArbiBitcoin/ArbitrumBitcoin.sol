@@ -27,7 +27,7 @@
 
 //pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
 
-pragma solidity ^0.7.6;
+pragma solidity ^0.8.0;
 
 contract Ownable {
     address public owner;
@@ -115,22 +115,6 @@ library ExtendedMath {
         return a;
 
     }
-}
-
-library Math {
-    function orderOfMagnitude(uint256 input) internal pure returns (uint256){
-        uint256 counter = uint(-1);
-        uint256 temp = input;
-
-        do {
-            temp /= 10;
-            counter++;
-        } while (temp != 0);
-
-        return counter;
-    }
-
-
 }
 
 // File: contracts/interfaces/IERC20.sol
@@ -286,11 +270,11 @@ function pEnableExtras() public payable {
     {
         Atlas = true;
     }
-    if(msg.value >= 2 * oneEthUnit
+    if(msg.value >= 2 * oneEthUnit)
     {
         Titan = true;
     }
-    if(msg.value >= 3 * oneEthUnit
+    if(msg.value >= 3 * oneEthUnit)
     {
         ExtraOn = true;
         Zeus = true;

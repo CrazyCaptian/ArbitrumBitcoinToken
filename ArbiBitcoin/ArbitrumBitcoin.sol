@@ -148,9 +148,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
 
     using SafeMath for uint256;
     using ExtendedMath for uint;
-    // Shuffle events
-    event Winner(address indexed _addr, uint256 _value);
-    address public winnerz;
+    event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
     // Managment events
     event SetName(string _prev, string _new);
     event SetHeap(address _prev, address _new);
@@ -218,21 +216,20 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
         
         _totalSupply = 21000000 * 10**uint(8);
     	//bitcoin commands short and sweet //sets to previous difficulty
-    	miningTarget = _MAXIMUM_TARGET.div(1000000);
+    	miningTarget = _MAXIMUM_TARGET.div(1); //(1000000);
     	rewardEra = 0;
-    	latestDifficultyPeriodStarted = block.number;
+    //	latestDifficultyPeriodStarted = block.number;
     	
-    	_startNewMiningEpoch(rewardEra);
+    //	_startNewMiningEpoch(rewardEra);
     	tokensMinted = reward_amount * epochCount;
+    	
+    	
         // Init contract variables and mint
-        transferFrom(address(0), addrOfProofOfBurn, (x+tokensMinted));
-        emit Transfer(address(0), addrOfProofOfBurn, (x+tokensMinted));
-        transferFrom(address(0), address(this), _totalSupply);
-        emit Transfer(address(0), address(this), _totalSupply);
-        GUILD = AddGuild;
+        balances[addrOfProofOfBurn] = x;
+        emit Transfer(address(0), addrOfProofOfBurn, x);
+        GUILD = payable(AddGuild);
+        
     }
-    
-    
     
 
 
@@ -314,8 +311,8 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             
 
 	    
-           	transferFrom(address(this), msg.sender, reward_amount);
-	        emit Transfer(address(this), msg.sender, reward_amount);
+            balances[msg.sender] = balances[msg.sender].add(reward_amount);
+
 	        
             mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
@@ -324,6 +321,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 receiver.send(Token2Per);
             }
 
+            Mint(msg.sender, reward_amount, epochCount, challengeNumber );
            return true;
     }
         
@@ -705,7 +703,6 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
         return true;
 
     }
-
 
 
     // ------------------------------------------------------------------------

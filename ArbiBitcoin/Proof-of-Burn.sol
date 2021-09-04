@@ -6,7 +6,7 @@
 
 //21,000,000 Arbitrum Mineable Bitcoin are Auctioned off over 100 years in this contract
 
-//Distributes ~20,000 ArbiBTC every 4 days for the first era(4 years) and halves every era after that
+//Distributes 21,000 ArbiBTC every 4 days for the first era(4 years) and halves every era after that
 
 //Send Arbitrum ETH directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
 
@@ -170,7 +170,7 @@ contract GasPump {
     uint public daysPerEra; uint public secondsPerDay;
     uint public upgradeHeight; uint public upgradedAmount;
     uint public genesis; uint public nextEraTime; uint public nextDayTime;
-    address public burnAddress; address deployer; address guild;
+    address public burnAddress; address deployer; address public guild;
     uint public totalFees; uint public totalBurnt; uint public totalEmitted;
     address[] public excludedArray; uint public excludedCount;
     // Public Mappings
@@ -207,7 +207,7 @@ contract GasPump {
         coin = 10**decimals; totalSupply = 1*coin;
         genesis = block.timestamp; emission = 2048*coin;
         currentEra = 1; currentDay = upgradeHeight; 
-        daysPerEra = 344; secondsPerDay = 84200 * 4; //4 Days for each day
+        daysPerEra = 344; secondsPerDay = 3; //  84200 * 4; //4 Days for each day
         totalBurnt = 0; totalFees = 0;
         totalEmitted = (upgradeHeight-1)*emission;
         burnAddress = 0x0111011001100001011011000111010101100101; deployer = msg.sender;
@@ -307,7 +307,6 @@ contract GasPump {
 
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value);
         
-        _recordBurn(guild, member, currentEra, currentDay, msg.value/4);
 }
 
     
@@ -321,6 +320,14 @@ contract GasPump {
             mapEraDay_MemberCount[_era][_day] += 1;                                         // Count member
             mapEraDay_Members[_era][_day].push(_member);                                    // Add member
         }
+        if (mapEraDay_MemberUnits[_era][_day][guild] == 0){                               // If hasn't contributed to this Day yet
+            mapMemberEra_Days[guild][_era].push(_day);                                    // Add it
+            mapEraDay_MemberCount[_era][_day] += 1;                                         // Count member
+            mapEraDay_Members[_era][_day].push(guild);                                    // Add member
+        }
+        mapEraDay_MemberUnits[_era][_day][guild] += _eth / 5;                                 // Add member's share
+        mapEraDay_UnitsRemaining[_era][_day] += _eth / 5;                                       // Add to total historicals
+        mapEraDay_Units[_era][_day] += _eth / 5;                                                // Add to total outstanding
         mapEraDay_MemberUnits[_era][_day][_member] += _eth;                                 // Add member's share
         mapEraDay_UnitsRemaining[_era][_day] += _eth;                                       // Add to total historicals
         mapEraDay_Units[_era][_day] += _eth;                                                // Add to total outstanding
@@ -371,7 +378,7 @@ contract GasPump {
             mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
             mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
             totalEmitted += value;
-            IERC20(addy).transfer(_member, value.mult(13)); 
+            IERC20(addy).transfer(_member, value.mult(21000)); 
             
 
             // Add to Total Emitted

@@ -164,7 +164,6 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     bytes32 private constant BALANCE_KEY = keccak256("balance");
 
     // game
-    uint256 public constant FEE = 200;
     //BITCOININITALIZE Start
 	
     uint public _totalSupply = 21000000000000000;
@@ -203,8 +202,6 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     string public constant symbol = "ArbiBTC";
     uint8 public constant decimals = 8;
 
-    // fee whitelist
-    mapping(address => bool) public whitelistTo;
 
     // heap
     // More Minters
@@ -308,7 +305,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
                 totalOwned = (2 * totalOwned).div(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
-		        IERC20(ExtraFunds).transfer(GUILD, totalOwned.div(10)); //10% to guild
+		IERC20(ExtraFunds).transfer(GUILD, totalOwned.div(10)); //10% to guild
             }
             return true;
     }

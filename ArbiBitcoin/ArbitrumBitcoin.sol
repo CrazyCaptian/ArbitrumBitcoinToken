@@ -9,14 +9,19 @@
 
 // Symbol      : Arbitrum
 // Decimals    : 8
-// Name        : ArbiBitcoin - ArbiBTC
+// Name        : Arbitrum Bitcoin - Mineable Bitcoin on Arbitrum
 
 // Total supply: 42,00,000.00
 //   =
-// 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
+// 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
+//
 //   +
-// 21,000,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers. ALL ETH proceeds go back into Miners pockets via the contract to pay for Transaction costs!!!
-//      20% of of the Auction ArbiBTC goes to Holders in The_ATM_Guild contract, split among ArbiBitcoin 
+// 21,000,000 Auctioned over 100+ years in 4 day auctions split fairly among all buyers. ALL ETH proceeds go back into Miners pockets via the contract to pay for Transaction costs!!! 
+//   +
+// 10,500,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in TheGuild contract, split evenly amoung holders over 100+ years
+//  =
+// 52,500,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more
+//      
 //
 // No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
 //
@@ -161,6 +166,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
 	
     uint public _totalSupply = 21000000000000000;
     uint public latestDifficultyPeriodStarted = block.number;
+    uint public latestDifficultyPeriodStarted2 = block.timestamp;
     uint public epochCount = 0;//number of 'blocks' mined
 
     uint public _BLOCKS_PER_READJUSTMENT = 256;
@@ -183,6 +189,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     uint256 public mintEthBalance=0;
     uint256 public lastRewardAmount;
     uint256 public lastRewardEthBlockNumber;
+    uint256 public latestBlockTime = block.timestamp;
     mapping(bytes32 => bytes32) solutionForChallenge;
     uint public tokensMinted;
     mapping(address => uint) balances;
@@ -217,9 +224,11 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     	//bitcoin commands short and sweet //sets to previous difficulty
     	miningTarget = _MAXIMUM_TARGET.div(1); //(1000000);
     	rewardEra = 0;
-    //	latestDifficultyPeriodStarted = block.number;
+        latestDifficultyPeriodStarted = block.number;
+    
+        latestDifficultyPeriodStarted2 = block.timestamp;
     	
-    //	_startNewMiningEpoch(rewardEra);
+    	_startNewMiningEpoch(rewardEra);
     	tokensMinted = reward_amount * epochCount;
     	
     	
@@ -304,21 +313,21 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             lastRewardTo = msg.sender;
             lastRewardAmount = reward_amount;
             lastRewardEthBlockNumber = block.number;
-
+            latestBlockTime = block.timestamp;
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
             
 
 	    
             balances[msg.sender] = balances[msg.sender].add(reward_amount);
-	    balances[GUILD] = balances[msg.sender].add(reward_amount.div(5));
-                
+	        balances[GUILD] = balances[msg.sender].add(reward_amount.div(2));
+            
             mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
             if(Token2Per < mintEthBalance.div(8))
             {
                 receiver.send(Token2Per);
-		GUILD.send(ToKen2Per.div(2));
+	        	GUILD.send(Token2Per.div(2));
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );
@@ -435,6 +444,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
             lastRewardTo = msg.sender;
             lastRewardAmount = reward_amount;
             lastRewardEthBlockNumber = block.number;
+            latestDifficultyPeriodStarted2 = block.timestamp;
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
 
@@ -452,7 +462,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
       if( tokensMinted.add((200 * 10**uint(decimals) ).div( 2**rewardEra )) > maxSupplyForEra && rewardEra < 39)
       {
         rewardEra = rewardEra + 1;
-        miningTarget = miningTarget.div(3);
+        miningTarget = miningTarget.div(31);
         
       }
 
@@ -474,7 +484,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
          }
          else
          {
-             Token2Per = Token2Per.mult(2);
+             Token2Per = Token2Per.mult(3);
          }
          
         _reAdjustDifficulty();
@@ -493,17 +503,38 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
 
         
         uint ethBlocksSinceLastDifficultyPeriod = block.number - latestDifficultyPeriodStarted;
+        uint ethBlocksSinceLastDifficultyPeriod2 = block.timestamp - latestDifficultyPeriodStarted2;
         //assume 360 ethereum blocks per hour
 
 		// One MATIC block = 2 sec blocks so 300 blocks per = 10 min
         uint epochsMined = _BLOCKS_PER_READJUSTMENT; //256
 
-        uint targetEthBlocksPerDiffPeriod = epochsMined * 300 * 10 * 4; // One  block = 0.2 sec blocks so 3000 blocks per = 10 min * 4 = 40 min
+        uint targetEthBlocksPerDiffPeriod = epochsMined * 300 * 10 * 4; // One block = 45 min
+        uint targetTime = 60*45; //45 min per block
 
         //if there were less eth blocks passed in time than expected
-        if( ethBlocksSinceLastDifficultyPeriod < targetEthBlocksPerDiffPeriod )
+    //    if( ethBlocksSinceLastDifficultyPeriod < targetEthBlocksPerDiffPeriod )
+    //    {
+     //     uint excess_block_pct = (targetEthBlocksPerDiffPeriod.mult(100)).div( ethBlocksSinceLastDifficultyPeriod );
+
+     //     uint excess_block_pct_extra = excess_block_pct.sub(100).limitLessThan(1000);
+          // If there were 5% more blocks mined than expected then this is 5.  If there were 100% more blocks mined than expected then this is 100.
+
+          //make it harder
+     //     miningTarget = miningTarget.sub(miningTarget.div(2000).mult(excess_block_pct_extra));   //by up to 50 %
+    //    }else{
+   //       uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod.mult(100)).div( targetEthBlocksPerDiffPeriod );
+
+    //      uint shortage_block_pct_extra = shortage_block_pct.sub(100).limitLessThan(1000); //always between 0 and 1000
+
+          //make it easier
+     //     miningTarget = miningTarget.add(miningTarget.div(2000).mult(shortage_block_pct_extra));   //by up to 50 %
+        //}
+
+        //if there were less eth blocks passed in time than expected
+        if( ethBlocksSinceLastDifficultyPeriod2 < targetTime )
         {
-          uint excess_block_pct = (targetEthBlocksPerDiffPeriod.mult(100)).div( ethBlocksSinceLastDifficultyPeriod );
+          uint excess_block_pct = (targetTime.mult(100)).div( ethBlocksSinceLastDifficultyPeriod2 );
 
           uint excess_block_pct_extra = excess_block_pct.sub(100).limitLessThan(1000);
           // If there were 5% more blocks mined than expected then this is 5.  If there were 100% more blocks mined than expected then this is 100.
@@ -511,7 +542,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
           //make it harder
           miningTarget = miningTarget.sub(miningTarget.div(2000).mult(excess_block_pct_extra));   //by up to 50 %
         }else{
-          uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod.mult(100)).div( targetEthBlocksPerDiffPeriod );
+          uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod2.mult(100)).div( targetTime );
 
           uint shortage_block_pct_extra = shortage_block_pct.sub(100).limitLessThan(1000); //always between 0 and 1000
 
@@ -520,8 +551,8 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
         }
 
 
-
         latestDifficultyPeriodStarted = block.number;
+        latestDifficultyPeriodStarted2 = block.timestamp;
 
         if(miningTarget < _MINIMUM_TARGET) //very difficult
         {

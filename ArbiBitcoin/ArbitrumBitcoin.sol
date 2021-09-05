@@ -19,8 +19,7 @@
 //      20% of of the Auction ArbiBTC goes to Holders in The_ATM_Guild contract, split among ArbiBitcoin 
 //
 // No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
-
-// Mints forever for every token
+//
 // Send this contract any ERC20 token and it will become instantly mineable and distribute forever!!
 
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!

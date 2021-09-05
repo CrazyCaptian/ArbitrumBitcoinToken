@@ -29,7 +29,7 @@
 // Send this contract any ERC20 token and it will become instantly mineable and able to distribute using proof-of-work for 1 year!!!!
 //
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will fairly to miners and Holders(
-                        **It must be worth it to distribute your token, each Mint prints 1/10,000 of your token! Dust wont work!
+                        **It must be worth it to distribute your token, each Mint prints ~1/10,000 of your token! Dust wont work!
 //
 //pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
 
@@ -318,7 +318,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             if(Token2Per < mintEthBalance.div(8))
             {
                 receiver.send(Token2Per);
-	        	GUILD.send(Token2Per.div(2));
+	        GUILD.send(Token2Per.div(2));
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );
@@ -355,7 +355,7 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
         totalOwned = (3 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds2).transfer(GUILD, totalOwned);
+        IERC20(ExtraFunds2).transfer(GUILD, totalOwned.div(3));
         }
         return true;
     }
@@ -389,7 +389,6 @@ function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, 
         uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
         totalOwned = (13 * totalOwned).divRound(15000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds4).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds3).transfer(GUILD, totalOwned.div(2));
     }
     return true;
 }
@@ -408,7 +407,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
         uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
         totalOwned = (23 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds3).transfer(GUILD, totalOwned.div(2));
+        IERC20(ExtraFunds3).transfer(GUILD, 23 * totalOwned);
     }
     return true;
 }
@@ -427,8 +426,10 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
 	     bytes32 solution = solutionForChallenge[challengeNumber];
              require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
              solutionForChallenge[challengeNumber] = digest;
-
-            IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000));  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
+	     
+            uint256 totalOwned = IERC20(mintEd).balanceOf(address(this));
+	    IERC20(mintEd).transfer(GUILD, totalOwned.div(10000 * 10)); // one tenth to the Guild!
+            IERC20(mintED).transfer(msg.sender, totalOwned.divRound(10000));  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
 		//Effectively burns ArbiBTC
             tokensMinted = tokensMinted.add(reward_amount);
 	

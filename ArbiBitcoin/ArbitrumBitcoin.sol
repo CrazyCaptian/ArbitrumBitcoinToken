@@ -199,7 +199,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     mapping(address => mapping(address => uint)) allowed;
     
     // metadata
-    string public name = "Arbitrum Bitcoin - Mineable Bitcoin on Arbitrum";
+    string public name = "Arbitrum Bitcoin - Mineable Tokens on Arbitrum";
     string public constant symbol = "ArbiBTC";
     uint8 public constant decimals = 8;
 

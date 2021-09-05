@@ -7,7 +7,7 @@
 //
 // ----------------------------------------------------------------------------1
 
-// Symbol      : Arbitrum
+// Symbol      : ArbiBTC
 // Decimals    : 8
 // Name        : Arbitrum Bitcoin - Mineable Tokens on Arbitrum
 

@@ -222,7 +222,7 @@ contract MinersGuild is
       uint256 burnedTokenRatio = (reserveTokenAmount*100000000) / totalReserveTokens  ;
       
        
-      return (internalVaultBalance * burnedTokenRatio) / 10000000000;
+      return (internalVaultBalance * burnedTokenRatio) / 100000000;
   }
 
   

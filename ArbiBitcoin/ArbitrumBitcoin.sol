@@ -281,10 +281,11 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             
             mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
+	    
             if(Token2Per < mintEthBalance.div(8))
             {
-            receiver.send(Token2Per);
-	        GUILD.send(Token2Per.div(2));
+           	 receiver.send(Token2Per);
+	    	GUILD.send(Token2Per.div(2));
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );
@@ -305,9 +306,9 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
             if(epochCount % 2 == 0)
             {      
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
-                totalOwned = (2 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
+                totalOwned = (2 * totalOwned).div(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
-		        IERC20(ExtraFunds).transfer(GUILD, totalOwned.div(10));
+		        IERC20(ExtraFunds).transfer(GUILD, totalOwned.div(10)); //10% to guild
             }
             return true;
     }
@@ -320,9 +321,9 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
     if(epochCount % 3 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
-        totalOwned = (3 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
+        totalOwned = (3 * totalOwned).div(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds2).transfer(GUILD, totalOwned.div(3));
+        IERC20(ExtraFunds2).transfer(GUILD, totalOwned.div(4)); //20% to guild
         }
         return true;
     }
@@ -337,7 +338,7 @@ function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, addre
     if(epochCount % 7 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds3).balanceOf(address(this));
-        totalOwned = (7 * totalOwned).divRound(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
+        totalOwned = (7 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds3).transfer(msg.sender, totalOwned);
         }
         return true;
@@ -354,7 +355,7 @@ function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, 
     if(epochCount % 13 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
-        totalOwned = (13 * totalOwned).divRound(15000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
+        totalOwned = (13 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds4).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -374,7 +375,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
         uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
         totalOwned = (23 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds3).transfer(GUILD, 23 * totalOwned);
+        IERC20(ExtraFunds5).transfer(GUILD, totalOwned); // half to guild
     }
     return true;
 }

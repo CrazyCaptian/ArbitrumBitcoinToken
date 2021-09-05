@@ -260,21 +260,55 @@ function pThirdDifficulty() public payable {
 
 
 function pEnableExtras() public payable {
-    require(msg.value >= oneEthUnit.div(2), "Must send at least 100 Matic to enable Extra Pools");
-    Aphrodite = true;
-    if(msg.value >= oneEthUnit)
-    {
-        Atlas = true;
-    }
-    if(msg.value >= 2 * oneEthUnit)
-    {
-        Titan = true;
-    }
-    if(msg.value >= 3 * oneEthUnit)
-    {
-        ExtraOn = true;
-        Zeus = true;
-    }
+	if(Zeuz && ExtraOn)
+	{
+		revert();
+		}
+	else if(Titan){
+		require(msg.value >= oneEthUnit, "");
+		Zeuz = true;
+		ExtraOn = true;
+	}
+	else if(Atlas){
+		require(msg.value >= oneEthUnit.div(3), "Must be 0.2 ETH for Titan and 1 ETH for Zeuz and ExtraOn");
+		Titan = true;
+		if(msg.value >= oneEthUnit)
+		{
+			Zeuz = true;
+			ExtraOn = true;
+		}
+	else if (Aphrodite){){
+		require(msg.value >= oneEthUnit.div(5), "Must be ETH");
+		Atlas = true;
+		if(msg.value >= oneEthUnit)
+		{
+			Zeuz = true;
+			ExtraOn = true;
+		}
+		if(msg.value >= oneEthUnit.div(3))
+		{
+			Titan = true
+		}
+	}
+	else
+	{
+		require(msg.value >= oneEthUnit.div(10), "Must be ETH");
+		Aphrodite = true;
+		if(msg.value >= oneEthUnit)
+		{
+			Zeuz = true;
+			ExtraOn = true;
+		}
+		if(msg.value >= oneEthUnit.div(3))
+		{
+			Titan = true
+		}
+		if(msg.value >= oneEthUnit.div(5))
+		{
+			Atlas = true
+		}
+		}
+		
 }
 
 

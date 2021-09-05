@@ -313,7 +313,7 @@ contract GasPump {
             if(LastTime + Delay < block.timestamp)
             {
                 LastTime = block.timestamp;
-                IERC20(addy).transfer(guild, 20000000000.div(currentEra));
+                IERC20(addy).transfer(guild, 25000000000.div(currentEra));
                 
                 }
             }

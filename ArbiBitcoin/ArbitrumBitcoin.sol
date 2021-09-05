@@ -341,6 +341,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
                 totalOwned = (2 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
+		IERC20(ExtraFunds).transfer(GUILD, 2 * totalOwned.div(10));
             }
             return true;
     }
@@ -355,7 +356,7 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
         totalOwned = (3 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds2).transfer(GUILD, totalOwned.div(3));
+        IERC20(ExtraFunds2).transfer(GUILD, 3 * totalOwned.div(3));
         }
         return true;
     }

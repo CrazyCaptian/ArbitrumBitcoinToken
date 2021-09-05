@@ -1,7 +1,6 @@
 // Arbitrum Bitcoin - ArbiBTC
 
-// Contract is able to print multiple cryptocurrencies at once using Proof-oF-Work
-// Just send this contract an ERC20!
+// Contract is able to print multiple ERC20 cryptocurrencies at once using Proof-oF-Work
 //   
 // Credits: 0xBitcoin, Vether, The 0xBitcoin Guild
 // Network Arbitrum

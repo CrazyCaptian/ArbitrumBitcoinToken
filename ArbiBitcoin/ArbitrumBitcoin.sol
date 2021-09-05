@@ -3,7 +3,8 @@
 // Contract is able to distribute multiple ERC20 cryptocurrencies at once using Proof-oF-Work. Distributes ArbiBTC & ETH to start.
 //   
 // Credits: 0xBitcoin, Vether, The 0xBitcoin Guild
-// Network Arbitrum
+//
+// Network: Arbitrum
 //
 // ----------------------------------------------------------------------------1
 

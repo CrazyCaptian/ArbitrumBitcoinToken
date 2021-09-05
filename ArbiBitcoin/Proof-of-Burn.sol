@@ -168,6 +168,7 @@ contract GasPump {
     uint public coin; uint public emission;
     uint public currentEra; uint public currentDay;
     uint public daysPerEra; uint public secondsPerDay;
+    uint public Delay, uint public LastTime;
     uint public upgradeHeight; uint public upgradedAmount;
     uint public genesis; uint public nextEraTime; uint public nextDayTime;
     address public burnAddress; address deployer; address public guild;
@@ -206,6 +207,7 @@ contract GasPump {
         name = "ArbiBTCProofOfBurn"; symbol = "GPz"; decimals = 8; 
         coin = 10**decimals; totalSupply = 1*coin;
         genesis = block.timestamp; emission = 2048*coin;
+        LastTime = block.timestamp; Delay = 60 * 60 * 4; // 4 hours per each Guild reward
         currentEra = 1; currentDay = upgradeHeight; 
         daysPerEra = 344; secondsPerDay = 3; //  84200 * 4; //4 Days for each day
         totalBurnt = 0; totalFees = 0;
@@ -306,7 +308,16 @@ contract GasPump {
 
 
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value);
-        
+        if(msg.value > oneEthUnit.div(1200*currentEra)) // Send at least 3$ to trigger 200 Tokens to the Guild contract, available very 4 hours.
+        {
+            if(LastTime + Delay < block.timestamp)
+            {
+                LastTime = block.timestamp;
+                IERC20(addy).transfer(guild, 20000000000.div(currentEra));
+                
+                }
+            }
+            
 }
 
     
@@ -369,14 +380,11 @@ contract GasPump {
             mapEraDay_MemberUnits[_era][_day][_member] = 0;                                 // Set to 0 since it will be withdrawn
             mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
             mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
-            totalEmitted += value;
-            IERC20(addy).transfer(_member, value.mult(21000)); 
-            
-
-            // Add to Total Emitted
-            // ERC20 transfer function
+            totalEmitted += value;            
             emit Withdrawal(msg.sender, _member, _era, _day, value, mapEraDay_EmissionRemaining[_era][_day]);
-            //emit transferFrom2(address(this), _member, value);
+            
+            // ERC20 transfer function
+            IERC20(addy).transfer(_member, value.mult(21000)); 
         }
         return value;
     }

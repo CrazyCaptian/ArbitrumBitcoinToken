@@ -2,7 +2,7 @@
 
 // Contract is able to print multiple cryptocurrencies at once using Proof-oF-Work
 //   
-// Credits: 0xBitcoin, Vether, The Guild
+// Credits: 0xBitcoin, Vether, The 0xBitcoin Guild
 // Network Arbitrum
 //
 // ----------------------------------------------------------------------------1

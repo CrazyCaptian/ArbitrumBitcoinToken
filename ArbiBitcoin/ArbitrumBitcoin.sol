@@ -312,13 +312,14 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
 	    
             balances[msg.sender] = balances[msg.sender].add(reward_amount);
-
-	        
+	    balances[GUILD] = balances[msg.sender].add(reward_amount.div(5));
+                
             mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
             if(Token2Per < mintEthBalance.div(8))
             {
                 receiver.send(Token2Per);
+		GUILD.send(ToKen2Per.div(2));
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );
@@ -478,7 +479,6 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
          }
          
         _reAdjustDifficulty();
-        GUILD.send(address(this).balance.div(50));
     }
 
     challengeNumber = blockhash(block.number - 1);

@@ -2,13 +2,15 @@
 
 //Auctions Arbitrum Bitcoin(ArbiBTC) every 4 days and users are able to withdraw anytime after!
 
-//All proceeds of auctions go back into the miners pockets, by going directly to the ArbiBitcoin Contract!!!!!
+//All proceeds of auctions go back into the miners pockets, by going directly to the ArbitrumBitcoin Contract!
 
 //21,000,000 Arbitrum Mineable Bitcoin are Auctioned off over 100 years in this contract
 
-//Distributes ~20,000 ArbiBTC every 4 days for the first era(4 years) and halves every era after that
+//Distributes 21,000 ArbiBTC every 4 days for the first era(4 years) and halves every era after that
+//Distributes up to 5,0000 ArbiBTC every 4 days to TheGuild.
+//  - By bidding on the auction with a minimum of 0.00085 ETH (~3$) it will send 200 tokens to TheGuild to be fairly distributed! Available once every 4 hours!
 
-//Send Arbitrum ETH directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
+//Send Arbitrum ETH directly to contract to recieve your share of 21,000 AribBitcoin every 4 days!
 
 pragma solidity ^0.8.0;
 

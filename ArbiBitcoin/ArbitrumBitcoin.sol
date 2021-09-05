@@ -437,7 +437,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
       //every so often, readjust difficulty. Dont readjust when deploying
     if((epochCount % _BLOCKS_PER_READJUSTMENT== 0))
     {
-         if(( mintEthBalance/ Token2Per) <= 200000)
+         if(( mintEthBalance/ Token2Per) <= 100000)
          {
              if(Token2Per.div(2) > Token3Min)
              {

@@ -474,7 +474,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
          }
          else
          {
-             Token2Per = Token2Per.mult(5);
+             Token2Per = Token2Per.mult(2);
          }
          
         _reAdjustDifficulty();

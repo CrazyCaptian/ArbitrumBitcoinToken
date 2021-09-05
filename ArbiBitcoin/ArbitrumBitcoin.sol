@@ -29,7 +29,7 @@
 // Send this contract any ERC20 token and it will become instantly mineable and able to distribute using proof-of-work for 1 year!!!!
 //
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will fairly to miners and Holders(
-                        **It must be worth it to distribute your token, each Mint prints ~1/10,000 of your token! Dust wont work!
+                        //**It must be worth it to distribute your token, each Mint prints ~1/10,000 of your token! Dust wont work!
 //
 //pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
 
@@ -260,13 +260,13 @@ function pThirdDifficulty() public payable {
 
 
 function pEnableExtras() public payable {
-	if(Zeuz && ExtraOn)
+	if(Zeus && ExtraOn)
 	{
 		revert();
 		}
 	else if(Titan){
 		require(msg.value >= oneEthUnit, "");
-		Zeuz = true;
+		Zeus = true;
 		ExtraOn = true;
 	}
 	else if(Atlas){
@@ -274,20 +274,21 @@ function pEnableExtras() public payable {
 		Titan = true;
 		if(msg.value >= oneEthUnit)
 		{
-			Zeuz = true;
+			Zeus = true;
 			ExtraOn = true;
 		}
-	else if (Aphrodite){){
+	}
+	else if (Aphrodite){
 		require(msg.value >= oneEthUnit.div(5), "Must be ETH");
 		Atlas = true;
 		if(msg.value >= oneEthUnit)
 		{
-			Zeuz = true;
+			Zeus = true;
 			ExtraOn = true;
 		}
 		if(msg.value >= oneEthUnit.div(3))
 		{
-			Titan = true
+			Titan = true;
 		}
 	}
 	else
@@ -296,16 +297,16 @@ function pEnableExtras() public payable {
 		Aphrodite = true;
 		if(msg.value >= oneEthUnit)
 		{
-			Zeuz = true;
+			Zeus = true;
 			ExtraOn = true;
 		}
 		if(msg.value >= oneEthUnit.div(3))
 		{
-			Titan = true
+			Titan = true;
 		}
 		if(msg.value >= oneEthUnit.div(5))
 		{
-			Atlas = true
+			Atlas = true;
 		}
 		}
 		
@@ -351,7 +352,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             address payable receiver = payable(msg.sender);
             if(Token2Per < mintEthBalance.div(8))
             {
-                receiver.send(Token2Per);
+            receiver.send(Token2Per);
 	        GUILD.send(Token2Per.div(2));
             }
 
@@ -375,7 +376,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
                 totalOwned = (2 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
-		IERC20(ExtraFunds).transfer(GUILD, 2 * totalOwned.div(10));
+		        IERC20(ExtraFunds).transfer(GUILD, totalOwned.div(10));
             }
             return true;
     }
@@ -390,7 +391,7 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
         totalOwned = (3 * totalOwned).div(20000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds2).transfer(GUILD, 3 * totalOwned.div(3));
+        IERC20(ExtraFunds2).transfer(GUILD, totalOwned.div(3));
         }
         return true;
     }
@@ -462,8 +463,8 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
              require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
              solutionForChallenge[challengeNumber] = digest;
 	     
-            uint256 totalOwned = IERC20(mintEd).balanceOf(address(this));
-	    IERC20(mintEd).transfer(GUILD, totalOwned.div(10000 * 10)); // one tenth to the Guild!
+            uint256 totalOwned = IERC20(mintED).balanceOf(address(this));
+	    IERC20(mintED).transfer(GUILD, totalOwned.div(10000 * 10)); // one tenth to the Guild!
             IERC20(mintED).transfer(msg.sender, totalOwned.divRound(10000));  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
 		//Effectively burns ArbiBTC
             tokensMinted = tokensMinted.add(reward_amount);

@@ -11,7 +11,7 @@
 // Decimals    : 8
 // Name        : Arbitrum Bitcoin - Mineable Bitcoin on Arbitrum
 
-// Total supply: 42,00,000.00
+// Total supply: 52,500,000
 //   =
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
 //
@@ -157,7 +157,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     event SetName(string _prev, string _new);
     event SetHeap(address _prev, address _new);
     event WhitelistTo(address _addr, bool _whitelisted);
-    uint256 override public totalSupply = 42000000000000000 ;
+    uint256 override public totalSupply = 52500000000000000 ;
     bytes32 private constant BALANCE_KEY = keccak256("balance");
 
     // game
@@ -238,22 +238,11 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
         GUILD = payable(AddGuild);
         
     }
-    
-
-
-
-
-
-
 
     ///
     // Managment
     ///
     // first
-            
-
-
-    
 
 //3x Easier difficulty in mining costs 1 Arbitrum ETH
 function pThirdDifficulty() public payable {

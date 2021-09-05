@@ -22,7 +22,7 @@
 //  =
 // 52,500,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more!
 //      
-// 33.3% of the ETH goes from this contract to Holders in Guild contract, which is split amoung guild members fairly! To fairly incentivize holding!
+// 33.3% of the ETH from this contract goes to Holders in Guild contract, which is split amoung guild members fairly! To fairly incentivize holding!
 // 66.6% of the ETH from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn ETH each mint!!
 //
 // No premine, dev cut, or advantage taken at launch. Public miner available at launch.

@@ -12,7 +12,7 @@
 // Decimals    : 8
 // Name        : Arbitrum Bitcoin - Mineable Tokens on Arbitrum
 
-// Total supply: 52,500,000
+// Total supply: 52,500,000.00000000
 //   =
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
 //   +

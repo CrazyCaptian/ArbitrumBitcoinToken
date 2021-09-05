@@ -339,7 +339,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
             if(epochCount % 2 == 0)
             {      
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
-                totalOwned = (2 * totalOwned).div(100000);  //100,000 epochs = half of era, 2x the reward for 1/2 of the time
+                totalOwned = (2 * totalOwned).div(10000);  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
 
             }
@@ -354,7 +354,7 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
     if(epochCount % 3 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
-        totalOwned = (3 * totalOwned).div(100000);  //100,000 epochs = half of era, 3x the reward for 1/3 of the time //no round ends here
+        totalOwned = (3 * totalOwned).div(10000);  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
         }
         return true;
@@ -370,7 +370,7 @@ function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, addre
     if(epochCount % 7 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds3).balanceOf(address(this));
-        totalOwned = (7 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 7x the reward for 1/7 of the time
+        totalOwned = (7 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
         IERC20(ExtraFunds3).transfer(msg.sender, totalOwned);
         }
         return true;
@@ -387,7 +387,7 @@ function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, 
     if(epochCount % 13 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
-        totalOwned = (13 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 13x the reward for 1/13 of the time
+        totalOwned = (13 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
         IERC20(ExtraFunds4).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -405,7 +405,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
     if(epochCount % 23 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
-        totalOwned = (23 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 23x the reward for 1/23 of the time
+        totalOwned = (23 * totalOwned).divRound(25000);  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
         IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -426,10 +426,10 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
              require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
              solutionForChallenge[challengeNumber] = digest;
 
-            IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000)); 
-
+            IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000));  //10000 was chosen to give each token a ~2 year distribution using Proof-of-Work
+		//Effectively burns ArbiBTC
             tokensMinted = tokensMinted.add(reward_amount);
-
+	
             reward_amount = (200 * 10**uint(decimals) ).div( 2**rewardEra );
             //set readonly diagnostics data
             lastRewardTo = msg.sender;

@@ -320,14 +320,6 @@ contract GasPump {
             mapEraDay_MemberCount[_era][_day] += 1;                                         // Count member
             mapEraDay_Members[_era][_day].push(_member);                                    // Add member
         }
-        if (mapEraDay_MemberUnits[_era][_day][guild] == 0){                               // If hasn't contributed to this Day yet
-            mapMemberEra_Days[guild][_era].push(_day);                                    // Add it
-            mapEraDay_MemberCount[_era][_day] += 1;                                         // Count member
-            mapEraDay_Members[_era][_day].push(guild);                                    // Add member
-        }
-        mapEraDay_MemberUnits[_era][_day][guild] += _eth / 5;                                 // Add member's share
-        mapEraDay_UnitsRemaining[_era][_day] += _eth / 5;                                       // Add to total historicals
-        mapEraDay_Units[_era][_day] += _eth / 5;                                                // Add to total outstanding
         mapEraDay_MemberUnits[_era][_day][_member] += _eth;                                 // Add member's share
         mapEraDay_UnitsRemaining[_era][_day] += _eth;                                       // Add to total historicals
         mapEraDay_Units[_era][_day] += _eth;                                                // Add to total outstanding

@@ -14,20 +14,22 @@
 // Total supply: 52,500,000
 //   =
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
-//
 //   +
 // 21,000,000 Auctioned over 100+ years in 4 day auctions split fairly among all buyers. ALL ETH proceeds go back into Miners pockets via the contract to pay for Transaction costs!!! 
 //   +
-// 10,500,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in TheGuild contract, split evenly amoung holders over 100+ years
+// 10,500,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in Guild contract, split evenly amoung holders over 100+ years
 //  =
-// 52,500,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more
+// 52,500,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more!
 //      
+// 33.3% of the ETH goes from this contract to Holders in Guild contract, which is split amoung all holders fairly!
+// 66.6% of the ETH from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn ETH each mint!!
 //
-// No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
+// No premine, dev cut, or advantage taken at launch. Public miner available at launch.
 //
-// Send this contract any ERC20 token and it will become instantly mineable and distribute forever!!
+// Send this contract any ERC20 token and it will become instantly mineable and distribute using proof-of-work over 1 and a half years!!!!
+// Make any token a Mineable Token on Arbitrum!!!
 
-//Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
+//Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will slowly reward a miners to mine it with us!
 
 //pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
 

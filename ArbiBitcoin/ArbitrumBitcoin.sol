@@ -30,8 +30,8 @@
 //
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will fairly to miners and Holders(
                         //**It must be worth it to distribute your token, each Mint prints ~1/10,000 of your token! Dust wont work!
-//
-//pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
+			
+//pThirdDifficulty Function allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
 
 pragma solidity ^0.8.0;
 

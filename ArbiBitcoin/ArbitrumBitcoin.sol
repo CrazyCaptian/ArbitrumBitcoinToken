@@ -30,8 +30,8 @@
 //
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will fairly to miners and Holders(
                         //**It must be worth it to distribute your token, each Mint prints ~1/10,000 of your token! Dust wont work!
-			
-//pThirdDifficulty Function allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
+//
+//pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 1 ETH  Makes mining 3x easier
 
 pragma solidity ^0.8.0;
 
@@ -245,76 +245,6 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     // Managment
     ///
     // first
-
-//3x Easier difficulty in mining costs 1 Arbitrum ETH
-function pThirdDifficulty() public payable {
-    require(msg.value >= 1 * oneEthUnit, "Must send 1 or more ETH to lower difficulty by 3x");  
-            
-	    miningTarget = miningTarget.mult(3);
-	    
-	    if(miningTarget > _MAXIMUM_TARGET){
-	    	miningTarget = _MAXIMUM_TARGET;
-	    }
-}
-
-
-
-function pEnableExtras() public payable {
-	if(Zeus && ExtraOn)
-	{
-		revert();
-		}
-	else if(Titan){
-		require(msg.value >= oneEthUnit, "");
-		Zeus = true;
-		ExtraOn = true;
-	}
-	else if(Atlas){
-		require(msg.value >= oneEthUnit.div(3), "Must be 0.2 ETH for Titan and 1 ETH for Zeuz and ExtraOn");
-		Titan = true;
-		if(msg.value >= oneEthUnit)
-		{
-			Zeus = true;
-			ExtraOn = true;
-		}
-	}
-	else if (Aphrodite){
-		require(msg.value >= oneEthUnit.div(5), "Must be ETH");
-		Atlas = true;
-		if(msg.value >= oneEthUnit)
-		{
-			Zeus = true;
-			ExtraOn = true;
-		}
-		if(msg.value >= oneEthUnit.div(3))
-		{
-			Titan = true;
-		}
-	}
-	else
-	{
-		require(msg.value >= oneEthUnit.div(10), "Must be ETH");
-		Aphrodite = true;
-		if(msg.value >= oneEthUnit)
-		{
-			Zeus = true;
-			ExtraOn = true;
-		}
-		if(msg.value >= oneEthUnit.div(3))
-		{
-			Titan = true;
-		}
-		if(msg.value >= oneEthUnit.div(5))
-		{
-			Atlas = true;
-		}
-		}
-		
-}
-
-
-
-
 
 
 function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
@@ -532,35 +462,14 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
     function _reAdjustDifficulty() internal {
 
         
-        uint ethBlocksSinceLastDifficultyPeriod = block.number - latestDifficultyPeriodStarted;
         uint ethBlocksSinceLastDifficultyPeriod2 = block.timestamp - latestDifficultyPeriodStarted2;
         //assume 360 ethereum blocks per hour
 
 		// One MATIC block = 2 sec blocks so 300 blocks per = 10 min
         uint epochsMined = _BLOCKS_PER_READJUSTMENT; //256
 
-        uint targetEthBlocksPerDiffPeriod = epochsMined * 300 * 10 * 4; // One block = 45 min
         uint targetTime = 60*45; //45 min per block
-
-        //if there were less eth blocks passed in time than expected
-    //    if( ethBlocksSinceLastDifficultyPeriod < targetEthBlocksPerDiffPeriod )
-    //    {
-     //     uint excess_block_pct = (targetEthBlocksPerDiffPeriod.mult(100)).div( ethBlocksSinceLastDifficultyPeriod );
-
-     //     uint excess_block_pct_extra = excess_block_pct.sub(100).limitLessThan(1000);
-          // If there were 5% more blocks mined than expected then this is 5.  If there were 100% more blocks mined than expected then this is 100.
-
-          //make it harder
-     //     miningTarget = miningTarget.sub(miningTarget.div(2000).mult(excess_block_pct_extra));   //by up to 50 %
-    //    }else{
-   //       uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod.mult(100)).div( targetEthBlocksPerDiffPeriod );
-
-    //      uint shortage_block_pct_extra = shortage_block_pct.sub(100).limitLessThan(1000); //always between 0 and 1000
-
-          //make it easier
-     //     miningTarget = miningTarget.add(miningTarget.div(2000).mult(shortage_block_pct_extra));   //by up to 50 %
-        //}
-
+        
         //if there were less eth blocks passed in time than expected
         if( ethBlocksSinceLastDifficultyPeriod2 < targetTime )
         {
@@ -644,6 +553,75 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
          return (200 * 10**uint(decimals) ).div( 2**rewardEra ) ;
 
     }
+
+// How to turn on Extra Minters for more tokens
+
+function pEnableExtras() public payable {
+	if(Zeus && ExtraOn)
+	{
+		revert();
+		}
+	else if(Titan){
+		require(msg.value >= oneEthUnit, "Must be 1 ETH for Zeuz and ExtraOn");
+		Zeus = true;
+		ExtraOn = true;
+	}
+	else if(Atlas){
+		require(msg.value >= oneEthUnit.div(3), "Must be 0.33 ETH for Titan and 1 ETH for Zeuz and ExtraOn");
+		Titan = true;
+		if(msg.value >= oneEthUnit)
+		{
+			Zeus = true;
+			ExtraOn = true;
+		}
+	}
+	else if (Aphrodite){
+		require(msg.value >= oneEthUnit.div(5), "Must be 0.2 ETH for Atlas or be 0.33 ETH for Titan or 1 ETH for Zeuz and ExtraOn");
+		Atlas = true;
+		if(msg.value >= oneEthUnit)
+		{
+			Zeus = true;
+			ExtraOn = true;
+		}
+		if(msg.value >= oneEthUnit.div(3))
+		{
+			Titan = true;
+		}
+	}
+	else
+	{
+		require(msg.value >= oneEthUnit.div(10), "Must be ETH at least 0.1 ETH to turn on the extra Distributors via PoW");
+		Aphrodite = true;
+		if(msg.value >= oneEthUnit)
+		{
+			Zeus = true;
+			ExtraOn = true;
+		}
+		if(msg.value >= oneEthUnit.div(3))
+		{
+			Titan = true;
+		}
+		if(msg.value >= oneEthUnit.div(5))
+		{
+			Atlas = true;
+		}
+		}
+		
+}
+
+
+
+//3x Easier difficulty in mining costs 1 Arbitrum ETH
+function pThirdDifficulty() public payable {
+    require(msg.value >= 1 * oneEthUnit, "Must send 1 or more ETH to lower difficulty by 3x");  
+            
+	    miningTarget = miningTarget.mult(3);
+	    
+	    if(miningTarget > _MAXIMUM_TARGET){
+	    	miningTarget = _MAXIMUM_TARGET;
+	    }
+}
+
 
     //help debug mining software
     function getMintDigest(uint256 nonce, bytes32 challenge_digest, bytes32 challenge_number) public view returns (bytes32 digesttest) {

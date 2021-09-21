@@ -160,60 +160,17 @@ contract MinersGuild is
         
      
     uint256 vaultOutputAmount =  _vaultOutputAmount( reserveTokenAmount, currencyToClaim );
-    uint ethOutput = _vaultOutputAmountETH(reserveTokenAmount);
+//    uint ethOutput = _vaultOutputAmountETH(reserveTokenAmount);
         
     MintableERC20(_reservePoolToken).burn(msg.sender,  reserveTokenAmount ); 
       
-    address payable receiver = payable(msg.sender);
-    receiver.send(ethOutput);
+ //   address payable receiver = payable(msg.sender);
+ //   receiver.send(ethOutput);
     IERC20(currencyToClaim).transfer( msg.sender, vaultOutputAmount );
 
      return true; 
   }
      
-  function unstakeCurrencyTwo( uint256 reserveTokenAmount, address currencyToClaim, address SecCurrencyToClaim) public returns (bool){
-        
-    require(unstakeCurrency(reserveTokenAmount, currencyToClaim));
-    
-    uint256 vaultOutputAmount2 =  _vaultOutputAmount( reserveTokenAmount, SecCurrencyToClaim );
-
-    IERC20(SecCurrencyToClaim).transfer( msg.sender, vaultOutputAmount2 );
-
-     return true; 
-  }
-  
-  function unstakeCurrencyThree( uint256 reserveTokenAmount, address currencyToClaim, address SecCurrencyToClaim, address ThirdCurrencyToClaim) public returns (bool){
-        
-    require(unstakeCurrencyTwo( reserveTokenAmount, currencyToClaim, SecCurrencyToClaim ));
-    
-    uint256 vaultOutputAmount3 =  _vaultOutputAmount( reserveTokenAmount, ThirdCurrencyToClaim );
-
-    IERC20(ThirdCurrencyToClaim).transfer( msg.sender, vaultOutputAmount3 );
-
-     return true; 
-  }
- 
-function unstakeCurrencyFour( uint256 reserveTokenAmount, address currencyToClaim, address SecCurrencyToClaim, address, address FourCurrencyToClaim) public returns (bool){
-        
-    require(unstakeCurrencyThree( reserveTokenAmount, currencyToClaim, SecCurrencyToClaim, ThirdCurrencyToClaim ));
-    
-    uint256 vaultOutputAmount4 =  _vaultOutputAmount( reserveTokenAmount, FourCurrencyToClaim );
-
-    IERC20(FourCurrencyToClaim).transfer( msg.sender, vaultOutputAmount4 );
-
-     return true; 
-  }
-  
-function unstakeCurrencyFive( uint256 reserveTokenAmount, address currencyToClaim, address SecCurrencyToClaim, address, address FourCurrencyToClaim, address FiveCurrencyToClaim) public returns (bool){
-        
-    require(unstakeCurrencyFour( reserveTokenAmount, currencyToClaim, SecCurrencyToClaim, ThirdCurrencyToClaim, FourCurrencyToClaim ));
-    
-    uint256 vaultOutputAmount5 =  _vaultOutputAmount( reserveTokenAmount, FiveCurrencyToClaim );
-
-    IERC20(FiveCurrencyToClaim).transfer( msg.sender, vaultOutputAmount5 );
-
-     return true; 
-  }
     
   
     //amount of reserve tokens to give to staker 

@@ -156,6 +156,8 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     using SafeMath for uint256;
     using ExtendedMath for uint;
     event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
+    event GuildMint(uint256 epochCount);
+    event GuildMintEth(uint256 ethpay);
     // Managment events
     event SetName(string _prev, string _new);
     event SetHeap(address _prev, address _new);
@@ -184,8 +186,13 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     uint public maxSupplyForEra = (_totalSupply - _totalSupply.div( 2**(rewardEra + 1)));
     uint public reward_amount = (200 * 10**uint(decimals) ).div( 2**rewardEra );
     address public lastRewardTo;
-    address payable public GUILD; //GUILD Contract
-    uint256 oneEthUnit = 1000000000000000000;
+    address payable public GUILD;
+    address payable public GUILD2;
+    address payable public GUILD3;
+    address payable public GUILD4;
+    address payable public GUILD5;
+    //GUILD Contracts
+    uint256 oneEthUnit =    1000000000000000000;
     uint256 public Token2Per = 1088888888888898;
     uint256 public Token3Min=  1088888888888898;
     uint256 public epochCount2 = 0;
@@ -206,16 +213,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     string public constant symbol = "ArbiBTC";
     uint8 public constant decimals = 8;
 
-
-    // heap
-    // More Minters
-    bool ExtraOn = false;
     bool inited = false;
-    bool Aphrodite = false;
-    bool Atlas = false;
-    bool Titan = false;
-    bool Zeus = false;
-    
     uint256 public sendb;
     function init(address addrOfProofOfBurn, address payable AddGuild) external onlyOwner{
         uint x = 2100000000000000;
@@ -269,8 +267,8 @@ function mintGuildToken(uint256 test) public{
 	uint256 epochCount3 = epochCount2;
 	epochCount2 = epochCount;
 	balances[GUILD] = balances[GUILD].add((epochCount - epochCount3) * reward_amount.div(3));
-	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epouchCount));
-	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epochCount));
+	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epochCount));
     emit GuildMint(epochCount);
 }
 
@@ -580,59 +578,6 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
     }
 
 // How to turn on Extra Minters for more tokens
-
-function pEnableExtras() public payable {
-	if(Zeus && ExtraOn)
-	{
-		revert();
-		}
-	else if(Titan){
-		require(msg.value >= oneEthUnit, "Must be 1 ETH for Zeuz and ExtraOn");
-		Zeus = true;
-		ExtraOn = true;
-	}
-	else if(Atlas){
-		require(msg.value >= oneEthUnit.div(3), "Must be 0.33 ETH for Titan and 1 ETH for Zeuz and ExtraOn");
-		Titan = true;
-		if(msg.value >= oneEthUnit)
-		{
-			Zeus = true;
-			ExtraOn = true;
-		}
-	}
-	else if (Aphrodite){
-		require(msg.value >= oneEthUnit.div(5), "Must be 0.2 ETH for Atlas or be 0.33 ETH for Titan or 1 ETH for Zeuz and ExtraOn");
-		Atlas = true;
-		if(msg.value >= oneEthUnit)
-		{
-			Zeus = true;
-			ExtraOn = true;
-		}
-		if(msg.value >= oneEthUnit.div(3))
-		{
-			Titan = true;
-		}
-	}
-	else
-	{
-		require(msg.value >= oneEthUnit.div(10), "Must be ETH at least 0.1 ETH to turn on the extra Distributors via PoW");
-		Aphrodite = true;
-		if(msg.value >= oneEthUnit)
-		{
-			Zeus = true;
-			ExtraOn = true;
-		}
-		if(msg.value >= oneEthUnit.div(3))
-		{
-			Titan = true;
-		}
-		if(msg.value >= oneEthUnit.div(5))
-		{
-			Atlas = true;
-		}
-		}
-		
-}
 
 
 

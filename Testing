@@ -18,11 +18,11 @@
 //   +
 // 21,000,000 Auctioned over 100+ years in 4 day auctions split fairly among all buyers. ALL ETH proceeds go into THIS contract(see below for breakdown of where it goes) 
 //   +
-// 10,500,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in Guild contract, split evenly amoung holders over 100+ years
+// 21,000,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in Guilds(1-3) contracts(33% each contract), split evenly amoung holders/LP Providers/0xBitcoin LP Providers of those Guilds over 100+ years!
 //  =
-// 52,500,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more!
+// 63,000,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more!
 //      
-// 33.3% of the ETH from this contract goes to Holders in Guild contract, which is split amoung guild members fairly! To fairly incentivize holding!
+// 33.3% of the ETH from this contract goes to LP Providers for this token in the Guild4 contract, which is split amoung guild members fairly! To fairly incentivize holding!
 // 66.6% of the ETH from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn ETH each mint!!
 //
 // No premine, dev cut, or advantage taken at launch. Public miner available at launch.
@@ -184,7 +184,11 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     uint public maxSupplyForEra = (_totalSupply - _totalSupply.div( 2**(rewardEra + 1)));
     uint public reward_amount = (200 * 10**uint(decimals) ).div( 2**rewardEra );
     address public lastRewardTo;
-    address payable public GUILD; //GUILD Contract
+    address payable public GUILD;
+    address payable public GUILD2;
+    address payable public GUILD3;
+    address payable public GUILD4;
+    //GUILD Contracts
     uint256 oneEthUnit =    1000000000000000000;
     uint256 public Token2Per = 1088888888888898;
     uint256 public Token3Min=  1088888888888898;
@@ -211,7 +215,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     // More Minters
     
     uint256 public sendb;
-    function init(address addrOfProofOfBurn, address payable AddGuild) external onlyOwner{
+    function init(address addrOfProofOfBurn, address payable AddGuild, address payable GuildTwo, address payable GuildThree, address payable GuildFourETH) external onlyOwner{
         uint x = 2100000000000000;
         // Only init once
         assert(!inited);
@@ -234,6 +238,9 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
         balances[addrOfProofOfBurn] = x;
         emit Transfer(address(0), addrOfProofOfBurn, x);
         GUILD = payable(AddGuild);
+	GUILD2 = payable(GuildTwo);
+	GUILD3 = payable(GuildThree);
+	GUILD4 = payable(GuildFourETH);
         
     }
 
@@ -246,9 +253,9 @@ function mintGuildToken(uint256 test) public returns bool {
 	require(epochCount > epouchCount2, "Needs a mined block");
 	uint256 epochCount3 = epochCount2;
 	epochCount2 = epochCount;
-	balances[GUILD] = balances[GUILD].add(reward_amount.div(4)*(epochCount3-epouchCount));
-	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(4)*(epochCount3-epouchCount));
-	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(4)*(epochCount3-epouchCount));
+	balances[GUILD] = balances[GUILD].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epouchCount));
 	return true;
 }
 
@@ -292,7 +299,7 @@ function mint(bool nonce, bool challenge_digest) public returns (bool success) {
             if(Token2Per < mintEthBalance.div(8) - (payeth * Token2Per.div(2)))
             {
            	 receiver.send(Token2Per);
-		         payeth.add(1);
+		 payeth.add(1);
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );

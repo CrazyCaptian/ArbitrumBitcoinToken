@@ -156,6 +156,8 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     using SafeMath for uint256;
     using ExtendedMath for uint;
     event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
+    event GuildMint(uint256 epochCount);
+    event GuildMintEth(uint256 ethpay);
     // Managment events
     event SetName(string _prev, string _new);
     event SetHeap(address _prev, address _new);
@@ -210,9 +212,6 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     string public constant symbol = "ArbiBTC";
     uint8 public constant decimals = 8;
 
-
-    // heap
-    // More Minters
     
     uint256 public sendb;
     function init(address addrOfProofOfBurn, address payable AddGuild, address payable GuildTwo, address payable GuildThree, address payable GuildFourETH) external onlyOwner{
@@ -247,15 +246,50 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     ///
     // Managment
     ///
-    // first
+    // first to start LP pools send me 100 tokens
+    function initFirst() external onlyOwner{
+    
+        // Init contract variables and mint
+        balances[msg.sender] = 10000000000;
+        emit Transfer(address(0), msg.sender, 10000000000;
+        
+    }
+    
+        function initSec(address addrOfProofOfBurn, address payable AddGuild, address payable GuildFourETH) external onlyOwner{
+        uint x = 2100000000000000;
+        // Only init once
+        assert(!inited);
+        inited = true;
+
+        
+        _totalSupply = 21000000 * 10**uint(8);
+    	//bitcoin commands short and sweet //sets to previous difficulty
+    	miningTarget = _MAXIMUM_TARGET.div(1); //(1000000);
+    	rewardEra = 0;
+        latestDifficultyPeriodStarted = block.number;
+    
+        latestDifficultyPeriodStarted2 = block.timestamp;
+    	
+    	_startNewMiningEpoch(rewardEra);
+    	tokensMinted = reward_amount * epochCount;
+    	
+    	
+        // Init contract variables and mint
+        balances[addrOfProofOfBurn] = x;
+        emit Transfer(address(0), addrOfProofOfBurn, x);
+        GUILD = payable(AddGuild);
+	GUILD4 = payable(GuildFourETH);
+        
+    }
 
 function mintGuildToken(uint256 test) public returns bool {
 	require(epochCount > epouchCount2, "Needs a mined block");
 	uint256 epochCount3 = epochCount2;
 	epochCount2 = epochCount;
 	balances[GUILD] = balances[GUILD].add(reward_amount.div(3)*(epochCount3-epouchCount));
-	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epouchCount));
-	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	//balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	//balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	GuildMint(epochCount);
 	return true;
 }
 
@@ -264,6 +298,7 @@ function mintGuildEth(uint256 test) public returns bool {
 	payeth2 = payeth;
 	payeth = 0;
 	GUILD4.send(Token2Per.div(2) * payeth2);
+  	GuildMintEth(ethpay);
 	return true;
 }
 function mint(bool nonce, bool challenge_digest) public returns (bool success) {

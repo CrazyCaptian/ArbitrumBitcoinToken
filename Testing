@@ -12,7 +12,7 @@
 // Decimals    : 8
 // Name        : Arbitrum Bitcoin - Mineable Tokens on Arbitrum
 
-// Total supply: 52,500,000.00000000
+// Total supply: 63,000,000.00000000
 //   =
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
 //   +
@@ -435,11 +435,13 @@ function mintExtraExtraToken(bool nonce, bool challenge_digest, address ExtraFun
     }
 
 
-    //42 m coins total
+    //63 m coins total
     // = 
     //21 million proof of work
     // + 
     //21 million proof of burn
+    // +
+    //21 million rewards for LP/Holders/and 0xBTC LP
     //reward begins at 200 tokens per and is cut in half every reward era(3-4 years)
 
     
@@ -473,7 +475,7 @@ function mintExtraExtraToken(bool nonce, bool challenge_digest, address ExtraFun
 
 
 
-    //21m coins total
+    //21m coins total for proof-of-work
     //reward begins at 50 and is cut in half every reward era (as tokens are mined)
     function getMiningReward() public view returns (uint) {
         //once we get half way thru the coins, only get 25 per block

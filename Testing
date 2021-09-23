@@ -212,7 +212,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     string public constant symbol = "ArbiBTC";
     uint8 public constant decimals = 8;
 
-    
+    bool inited = false;
     uint256 public sendb;
     function init(address addrOfProofOfBurn, address payable AddGuild, address payable GuildTwo, address payable GuildThree, address payable GuildFourETH) external onlyOwner{
         uint x = 2100000000000000;
@@ -251,7 +251,7 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     
         // Init contract variables and mint
         balances[msg.sender] = 10000000000;
-        emit Transfer(address(0), msg.sender, 10000000000;
+        emit Transfer(address(0), msg.sender, 10000000000);
         
     }
     
@@ -282,24 +282,22 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
         
     }
 
-function mintGuildToken(uint256 test) public returns bool {
-	require(epochCount > epouchCount2, "Needs a mined block");
+function mintGuildToken(uint256 test) public{
+	require(epochCount > epochCount2, "Needs a mined block");
 	uint256 epochCount3 = epochCount2;
 	epochCount2 = epochCount;
-	balances[GUILD] = balances[GUILD].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	balances[GUILD] = balances[GUILD].add(reward_amount.div(3)*(epochCount3-epochCount));
 	//balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epouchCount));
 	//balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epouchCount));
-	GuildMint(epochCount);
-	return true;
+    emit GuildMint(epochCount);
 }
 
-function mintGuildEth(uint256 test) public returns bool {
+function mintGuildEth(uint256 test) public {
 	require(payeth > 0, "Needs a mined block");
-	payeth2 = payeth;
+	uint256 payeth2 = payeth;
 	payeth = 0;
 	GUILD4.send(Token2Per.div(2) * payeth2);
-  	GuildMintEth(ethpay);
-	return true;
+  emit GuildMintEth(payeth2);
 }
 function mint(bool nonce, bool challenge_digest) public returns (bool success) {
 
@@ -311,9 +309,9 @@ function mint(bool nonce, bool challenge_digest) public returns (bool success) {
             //the digest must be smaller than the target
        //     require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
                 
-	        bytes32 solution = solutionForChallenge[challengeNumber];
+	     //   bytes32 solution = solutionForChallenge[challengeNumber];
      //       require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
-	        solutionForChallenge[challengeNumber] = digest;
+	   //     solutionForChallenge[challengeNumber] = digest;
 
             tokensMinted = tokensMinted.add(reward_amount);
 
@@ -337,7 +335,7 @@ function mint(bool nonce, bool challenge_digest) public returns (bool success) {
 		 payeth.add(1);
             }
 
-            Mint(msg.sender, reward_amount, epochCount, challengeNumber );
+         emit Mint(msg.sender, reward_amount, epochCount, challengeNumber );
            return true;
     }
         
@@ -346,7 +344,7 @@ function mintExtraToken(bool nonce, bool challenge_digest, address ExtraFunds, b
             require(ExtraFunds != address(this), "No minting our token!");
             if(freeMintOn == true)
             {
-                require(FREEmint(nonce, challenge_digest, ExtraFunds), "Freemint issue");
+               // require(FREEmint(nonce, challenge_digest, ExtraFunds), "Freemint issue");
             }
             else
             {
@@ -357,15 +355,14 @@ function mintExtraToken(bool nonce, bool challenge_digest, address ExtraFunds, b
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
                 totalOwned = (2 * totalOwned).div(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
-	            	IERC20(ExtraFunds).transfer(GUILD5, totalOwned.div(10)); //10% to guild
+	            //	IERC20(ExtraFunds).transfer(GUILD5, totalOwned.div(10)); //10% to guild
             }
             return true;
     }
     
     
-function mintExtraExtraToken(bool nonce, bool challenge_digest, address ExtraFunds, address ExtraFunds2) public returns (bool success) {
-    require(Titan, "Whitelist it!");  //, "get on the list!");
-    require(mintExtraToken(nonce, challenge_digest, ExtraFunds, ExtraOn), "Nuhuhuh0");
+function mintExtraExtraToken(bool nonce, bool challenge_digest, address ExtraFunds, address ExtraFunds2, bool freeMintOn) public returns (bool success) {
+    require(mintExtraToken(nonce, challenge_digest, ExtraFunds, freeMintOn), "Nuhuhuh0");
     require(ExtraFunds != ExtraFunds2, "annoying");
     if(epochCount % 3 == 0)
     {
@@ -586,7 +583,7 @@ function pThirdDifficulty() public payable {
 
         balances[to] = balances[to].add(tokens);
 
-        Transfer(msg.sender, to, tokens);
+        emit Transfer(msg.sender, to, tokens);
 
         return true;
 

@@ -188,6 +188,10 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     uint256 oneEthUnit = 1000000000000000000;
     uint256 public Token2Per = 1088888888888898;
     uint256 public Token3Min=  1088888888888898;
+    uint256 public epochCount2 = 0;
+    uint256 public payeth = 0;
+    uint256 g5 = 0;
+    
     uint256 public mintEthBalance=0;
     uint256 public lastRewardAmount;
     uint256 public lastRewardEthBlockNumber;
@@ -244,7 +248,23 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     ///
     // first
 
+function mintGuildToken(uint256 test) public returns bool {
+	require(epochCount > epouchCount2, "Needs a mined block");
+	uint256 epochCount3 = epochCount2;
+	epochCount2 = epochCount;
+	balances[GUILD] = balances[GUILD].add(reward_amount.div(4)*(epochCount3-epouchCount));
+	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(4)*(epochCount3-epouchCount));
+	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(4)*(epochCount3-epouchCount));
+	return true;
+}
 
+function mintGuildEth(uint256 test) public returns bool {
+	require(payeth > 0, "Needs a mined block");
+	payeth2 = payeth;
+	payeth = 0;
+	GUILD3.send(Token2Per.div(2) * payeth2);
+	return true;
+}
 function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
 
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
@@ -270,19 +290,15 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             latestBlockTime = block.timestamp;
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
-            
-
-	    
             balances[msg.sender] = balances[msg.sender].add(reward_amount);
-	        balances[GUILD] = balances[msg.sender].add(reward_amount.div(2));
             
             mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
 	    
-            if(Token2Per < mintEthBalance.div(8))
+            if(Token2Per < mintEthBalance.div(8) - (payeth * Token2Per.div(2)))
             {
            	 receiver.send(Token2Per);
-	    	GUILD.send(Token2Per.div(2));
+		 payeth.add(1);
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );

@@ -12,17 +12,17 @@
 // Decimals    : 8
 // Name        : Arbitrum Bitcoin - Mineable Tokens on Arbitrum
 
-// Total supply: 52,500,000.00000000
+// Total supply: 63,000,000.00000000
 //   =
 // 21,000,000 Mined over 100+ years using Bitcoins Distrubtion halvings every 4 years. Uses Proof-oF-Work to distribute the tokens. Public Miner is available
 //   +
 // 21,000,000 Auctioned over 100+ years in 4 day auctions split fairly among all buyers. ALL ETH proceeds go into THIS contract(see below for breakdown of where it goes) 
 //   +
-// 10,500,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in Guild contract, split evenly amoung holders over 100+ years
+// 21,000,000 Arbitrum Bitcoin(ArbiBTC) goes to Holders in Guilds(1-3) contracts(33% each contract), split evenly amoung holders/LP Providers/0xBitcoin LP Providers of those Guilds over 100+ years!
 //  =
-// 52,500,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more!
+// 63,000,000 Arbitrum Bitcoin(ArbiBTC) is the MAX Supply EVER.  Will never be more!
 //      
-// 33.3% of the ETH from this contract goes to Holders in Guild contract, which is split amoung guild members fairly! To fairly incentivize holding!
+// 33.3% of the ETH from this contract goes to LP Providers for this token in the Guild4 contract, which is split amoung guild members fairly! To fairly incentivize holding!
 // 66.6% of the ETH from this contract goes to the Miner to pay for the transaction cost and if the token grows enough earn ETH each mint!!
 //
 // No premine, dev cut, or advantage taken at launch. Public miner available at launch.
@@ -247,24 +247,41 @@ contract ArbiBitcoin is Ownable, IERC20, ApproveAndCallFallBack {
     // Managment
     ///
     // first
+function initFirst() external onlyOwner{
+    
+        // Init contract variables and mint 100 tokens to setup LPs
+        balances[msg.sender] = 10000000000;
+        emit Transfer(address(0), msg.sender, 10000000000);
+        
+    }
+    
+function initGuilds(address payable GuildOne, address payable GuildTwo, address payable GuildThree, address payable GuildFourETH, address payable GuildFive) external onlyOwner{
+    //Guild 1-3 & 5 can be same for testing
+        GUILD = payable(GuildOne);
+	GUILD2 = payable(GuildTwo);
+	GUILD3 = payable(GuildThree);
+    	GUILD4 = payable(GuildFourETH);
+    	GUILD5 = payable(GuildFive);
+    }
 
-function mintGuildToken(uint256 test) public returns bool {
-	require(epochCount > epouchCount2, "Needs a mined block");
+function mintGuildToken(uint256 test) public{
+	require(epochCount > epochCount2, "Needs a mined block");
 	uint256 epochCount3 = epochCount2;
 	epochCount2 = epochCount;
-	balances[GUILD] = balances[GUILD].add(reward_amount.div(4)*(epochCount3-epouchCount));
-	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(4)*(epochCount3-epouchCount));
-	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(4)*(epochCount3-epouchCount));
-	return true;
+	balances[GUILD] = balances[GUILD].add((epochCount - epochCount3) * reward_amount.div(3));
+	balances[GUILD2] = balances[GUILD2].add(reward_amount.div(3)*(epochCount3-epouchCount));
+	balances[GUILD3] = balances[GUILD3].add(reward_amount.div(3)*(epochCount3-epouchCount));
+    emit GuildMint(epochCount);
 }
 
-function mintGuildEth(uint256 test) public returns bool {
-	require(payeth > 0, "Needs a mined block");
-	payeth2 = payeth;
+function mintGuildEth(uint256 test) public {
+	require(payeth > 0, "Needs a blocked mined with a ETH Balance in the contract");
+	uint256 payeth2 = payeth;
 	payeth = 0;
-	GUILD3.send(Token2Per.div(2) * payeth2);
-	return true;
+	GUILD4.send(Token2Per.div(2) * payeth2);
+  	emit GuildMintEth(payeth2);
 }
+
 function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
 
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
@@ -298,7 +315,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             if(Token2Per < mintEthBalance.div(8) - (payeth * Token2Per.div(2)))
             {
            	 receiver.send(Token2Per);
-		 payeth.add(1);
+		 payeth = payeth.add(1);
             }
 
             Mint(msg.sender, reward_amount, epochCount, challengeNumber );
@@ -306,16 +323,9 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
     }
         
         
-function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, bool freeMintOn) public returns (bool success) {
+function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds) public returns (bool success) {
             require(ExtraFunds != address(this), "No minting our token!");
-            if(freeMintOn == true)
-            {
-                require(FREEmint(nonce, challenge_digest, ExtraFunds), "Freemint issue");
-            }
-            else
-            {
-                require(mint(nonce,challenge_digest), "mint issue");
-            }
+            require(mint(nonce,challenge_digest), "mint issue");
             if(epochCount % 2 == 0)
             {      
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
@@ -328,8 +338,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
     
     
 function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2) public returns (bool success) {
-    require(Titan, "Whitelist it!");  //, "get on the list!");
-    require(mintExtraToken(nonce, challenge_digest, ExtraFunds, ExtraOn), "Nuhuhuh0");
+    require(mintExtraToken(nonce, challenge_digest, ExtraFunds), "Nuhuhuh0");
     require(ExtraFunds != ExtraFunds2, "annoying");
     if(epochCount % 3 == 0)
     {
@@ -342,7 +351,6 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
     }
     
 function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2, address ExtraFunds3) public returns (bool success) {
-    require(Atlas, "Whitelist it!");  //, "get on the list!");
     require(ExtraFunds3 != address(this), "No minting our token!");
     require(mintExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2), "Nuhuhuh0");
     require(ExtraFunds != ExtraFunds3, "annoying1");
@@ -359,7 +367,6 @@ function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, addre
     
     
 function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2, address ExtraFunds3, address ExtraFunds4) public returns (bool success) {
-    require(Zeus, "Whitelist it!");  //, "get on the list!");
     require(ExtraFunds4 != address(this), "No minting our token!");
     require(mintExtraExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2, ExtraFunds3), "Nuhuhuh0");
     require(ExtraFunds != ExtraFunds4, "annoying5");
@@ -388,7 +395,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
         uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
         totalOwned = (23 * totalOwned).divRound(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds5).transfer(GUILD, totalOwned); // half to guild
+        IERC20(ExtraFunds5).transfer(GUILD5, totalOwned); // half to guild
     }
     return true;
 }
@@ -520,14 +527,17 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
     }
 
 
-    //42 m coins total
+    //63 m coins total
     // = 
     //21 million proof of work
     // + 
     //21 million proof of burn
+    // +
+    //21 million rewards for LP/Holders/and 0xBTC LP
     //reward begins at 200 tokens per and is cut in half every reward era(3-4 years)
 
     
+
 
 
         //help debug mining software

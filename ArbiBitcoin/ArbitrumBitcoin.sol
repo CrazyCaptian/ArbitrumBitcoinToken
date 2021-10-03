@@ -329,7 +329,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
                 totalOwned = (2 * totalOwned).div(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
-		IERC20(ExtraFunds).transfer(GUILD, totalOwned.div(10)); //10% to guild
+		IERC20(ExtraFunds).transfer(GUILD5, totalOwned.div(10)); //10% to guild
             }
             return true;
     }
@@ -343,7 +343,7 @@ function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address Ex
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
         totalOwned = (3 * totalOwned).div(10000);  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
-        IERC20(ExtraFunds2).transfer(GUILD, totalOwned.div(4)); //20% to guild
+        IERC20(ExtraFunds2).transfer(GUILD5, totalOwned.div(4)); //20% to guild
         }
         return true;
     }
@@ -414,7 +414,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
              solutionForChallenge[challengeNumber] = digest;
 	     
             uint256 totalOwned = IERC20(mintED).balanceOf(address(this));
-	    IERC20(mintED).transfer(GUILD, totalOwned.div(10000 * 10)); // one tenth to the Guild!
+	    IERC20(mintED).transfer(GUILD5, totalOwned.div(10000 * 10)); // one tenth to the Guild!
             IERC20(mintED).transfer(msg.sender, totalOwned.divRound(10000));  //10000 was chosen to give each token a ~1 year distribution using Proof-of-Work
 		//Effectively burns ArbiBTC
             tokensMinted = tokensMinted.add(reward_amount);
